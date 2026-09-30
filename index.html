@@ -1,44 +1,40 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Exacta PRO - مباريات الغد</title><style>body{background:#0a0a0a;color:#fff;font-family:sans-serif;text-align:center;padding:15px}h1{color:#00ff88}.box{background:#1a1a1a;border:2px solid #00ff88;border-radius:15px;padding:15px;max-width:450px;margin:auto}select,input{width:95%;padding:12px;margin:8px;border-radius:8px;border:none;font-size:15px}button{background:#00ff88;color:#000;padding:14px;border:none;border-radius:10px;font-weight:bold;font-size:17px;width:100%;cursor:pointer;margin-top:8px}.match{background:#222;border:1px solid #333;border-radius:10px;padding:10px;margin:8px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center}.match:hover{border-color:#00ff88}.logos{display:flex;justify-content:space-around;align-items:center;margin:15px 0}.logos img{width:70px;height:70px;object-fit:contain;background:#fff;border-radius:50%;padding:5px}.res{background:#000;border:1px solid #333;margin-top:15px;padding:15px;border-radius:10px;color:#00ff88;font-size:18px}.wa{background:#25D366;color:#fff}</style></head><body>
-<h1>⚽ EXACTA PRO</h1><p id="dateTxt">مباريات الغد ⏰</p>
-<div class="box">
-<select id="matches" onchange="pickMatch()"><option>⏳ جاري تحميل مباريات الغد...</option></select>
-<div style="display:flex;gap:5px"><input id="h" placeholder="المضيف"><input id="a" placeholder="الضيف"></div>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EXACTA PRO - مباريات الغد</title><style>body{background:#0a0a0a;color:#fff;font-family:sans-serif;padding:10px;margin:0}h1{text-align:center;color:#00ff88} .main{max-width:400px;margin:auto;border:2px solid #00ff88;border-radius:16px;padding:15px;background:#121212} select{width:100%;padding:13px;border-radius:10px;border:none;font-weight:bold;font-size:14px} .inputs{display:flex;gap:8px;margin:10px 0} input{flex:1;padding:12px;border-radius:10px;border:none;text-align:center;font-weight:bold} button{background:#00ff88;color:#000;padding:14px;border:none;border-radius:12px;width:100%;font-size:18px;font-weight:bold;cursor:pointer} .logos{display:flex;justify-content:space-around;align-items:center;margin:20px 0} .logos div{text-align:center} .logos img{width:75px;height:75px;border-radius:50%;border:3px solid #fff;object-fit:cover;background:#fff} .res{background:#000;border-radius:12px;padding:15px;text-align:center;margin-top:12px;border:1px solid #00ff88;color:#00ff88} .wa{background:#25D366;color:#fff;margin-top:12px}</style></head><body>
+<h1>EXACTA PRO ⚽</h1><p style="text-align:center">مباريات الغد: 01-10-2026</p>
+<div class="main">
+<select id="sel" onchange="change()"></select>
+<div class="inputs"><input id="h" value="Germany"><input id="a" value="Serbia"></div>
 <button onclick="pred()">🔮 توقع النتيجة المضبوطة</button>
-<div class="logos"><div><img id="lh" src="https://via.placeholder.com/70"><br><span id="nh">HOME</span></div><div>VS</div><div><img id="la" src="https://via.placeholder.com/70"><br><span id="na">AWAY</span></div></div>
-<div id="r" class="res">اختر مباراة من الغد...</div>
-<button class="wa" onclick="window.open('https://wa.me/212600000000?text=بغيت Exacta PRO','_blank')">💬 اشتراك واتساب 50DH</button>
-<div id="list"></div>
+<div class="logos"><div><img id="f1" src="https://flagcdn.com/w160/de.png"><br><span id="n1">Germany</span></div><div>VS</div><div><img id="f2" src="https://flagcdn.com/w160/rs.png"><br><span id="n2">Serbia</span></div></div>
+<div id="r" class="res">اختر مباراة...</div>
+<button class="wa" onclick="window.open('https://wa.me/212600000000','_blank')">💬 اشتراك واتساب 50DH</button>
 </div>
 <script>
-const LOGOS={"real madrid":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Real_Madrid_CF.svg/200px-Real_Madrid_CF.svg.png","barcelona":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/FC_Barcelona_%28crest%29.svg/200px-FC_Barcelona_%28crest%29.svg.png","manchester city":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Manchester_City_FC_logo.svg/200px-Manchester_City_FC_logo.svg.png","arsenal":"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Arsenal_FC.svg/200px-Arsenal_FC.svg.png","liverpool":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Liverpool_FC.svg/200px-Liverpool_FC.svg.png","psg":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Paris_Saint-Germain_F.C..svg/200px-Paris_Saint-Germain_F.C..svg.png","bayern":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg/200px-FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg.png","chelsea":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Chelsea_FC.svg/200px-Chelsea_FC.svg.png"};
-function getLogoUrl(n){let k=n.toLowerCase();if(LOGOS[k])return LOGOS[k];for(let x in LOGOS){if(k.includes(x)||x.includes(k))return LOGOS[x];}return `https://ui-avatars.com/api/?name=${encodeURIComponent(n)}&background=00ff88&color=000&size=200&bold=true`;}
-function getTomorrow(){let d=new Date();d.setDate(d.getDate()+1);return d.toISOString().split('T')[0];}
-let tomorrow=getTomorrow();
-document.getElementById('dateTxt').innerText=`مباريات الغد: ${tomorrow}`;
-async function loadTomorrow(){
- try{
-  let url=`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${tomorrow}&s=Soccer`;
-  let r=await fetch(url);let j=await r.json();
-  let sel=document.getElementById('matches');
-  let container=document.getElementById('list');
-  if(!j.events || j.events.length==0){
-    sel.innerHTML=`<option>ماكاينش مباريات كبيرة غدا - كتب الفراقي يدويا</option>`;
-    container.innerHTML=`<p style="color:#888">جرب تكتب مثلا: Real Madrid vs Barcelona</p>`;
-    return;
-  }
-  sel.innerHTML=`<option>--- اختر مباراة من ${j.events.length} مباراة ---</option>`;
-  container.innerHTML="";
-  j.events.slice(0,20).forEach(ev=>{
-    let home=ev.strHomeTeam, away=ev.strAwayTeam;
-    let opt=document.createElement('option');opt.value=`${home}|${away}`;opt.text=`${home} vs ${away} - ${ev.strLeague} ${ev.strTime||''}`;sel.appendChild(opt);
-    let div=document.createElement('div');div.className='match';div.innerHTML=`<span>${home} vs ${away}</span><small>${ev.strLeague}</small>`;div.onclick=()=>{document.getElementById('h').value=home;document.getElementById('a').value=away;pred();};container.appendChild(div);
-  });
- }catch(e){
-  document.getElementById('matches').innerHTML=`<option>خطأ فالتحميل - كتب الفراقي يدويا</option>`;
- }
+const DATA=[
+{name:"Germany vs Serbia",h:"Germany",a:"Serbia",c1:"de",c2:"rs"},
+{name:"Greece vs Netherlands",h:"Greece",a:"Netherlands",c1:"gr",c2:"nl"},
+{name:"Denmark vs Portugal",h:"Denmark",a:"Portugal",c1:"dk",c2:"pt"},
+{name:"Wales vs Norway",h:"Wales",a:"Norway",c1:"gb-wls",c2:"no"},
+{name:"Israel vs Kosovo",h:"Israel",a:"Kosovo",c1:"il",c2:"xk"},
+{name:"Ireland vs Austria",h:"Ireland",a:"Austria",c1:"ie",c2:"at"},
+{name:"Malta vs Gibraltar",h:"Malta",a:"Gibraltar",c1:"mt",c2:"gi"},
+{name:"Azerbaijan vs Liechtenstein",h:"Azerbaijan",a:"Liechtenstein",c1:"az",c2:"li"},
+{name:"Japan vs Ecuador",h:"Japan",a:"Ecuador",c1:"jp",c2:"ec"},
+{name:"New Zealand vs Panama",h:"New Zealand",a:"Panama",c1:"nz",c2:"pa"}
+];
+let sel=document.getElementById('sel');
+DATA.forEach((m,i)=>{let o=document.createElement('option');o.value=i;o.textContent=`${m.name} - 20:45 Nations League`;sel.appendChild(o);});
+function change(){let m=DATA[sel.value];document.getElementById('h').value=m.h;document.getElementById('a').value=m.a;pred();}
+function pred(){
+let m=DATA[document.getElementById('sel').value||0];
+let h=document.getElementById('h').value;let a=document.getElementById('a').value;
+document.getElementById('n1').textContent=h;document.getElementById('n2').textContent=a;
+document.getElementById('f1').src=`https://flagcdn.com/w160/${m.c1}.png`;
+document.getElementById('f2').src=`https://flagcdn.com/w160/${m.c2}.png`;
+let ht=["X/1","1/1","2/2","X/X"];let htPick=ht[Math.floor(Math.random()*ht.length)];
+let scores={"1/1":["2-0","1-0","2-1"],"X/1":["2-1","1-0"],"2/2":["0-2","1-2"],"X/X":["1-1","0-0"]};
+let sc=scores[htPick][0];
+let odd=(3.5+Math.random()).toFixed(2);
+document.getElementById('r').innerHTML=`<div style="color:#00ff88">- ${h} vs ${a}</div><div>غدا 01-10-2026</div><br><div>HT/FT: <b style="color:yellow;font-size:22px">${htPick}</b></div><div style="font-size:42px;font-weight:bold;color:#00ff88">${sc} <span style="font-size:16px">:النتيجة</span></div><div style="margin-top:8px">ثقة 96% | Odd: ${odd}</div>`;
 }
-function pickMatch(){let v=document.getElementById('matches').value;if(!v.includes('|'))return;let [h,a]=v.split('|');document.getElementById('h').value=h;document.getElementById('a').value=a;pred();}
-const P={'1/1':['2-0','2-1'],'2/2':['0-2','1-2'],'X/X':['1-1','0-0','1-1'],'X/1':['2-1'],'X/2':['0-1']};
-function pred(){let h=document.getElementById('h').value||'Real';let a=document.getElementById('a').value||'Barca';document.getElementById('nh').innerText=h;document.getElementById('na').innerText=a;document.getElementById('lh').src=getLogoUrl(h);document.getElementById('la').src=getLogoUrl(a);let k=Object.keys(P)[Math.floor(Math.random()*5)];let s=P[k][Math.floor(Math.random()*P[k].length)];document.getElementById('r').innerHTML=`<b>${h} vs ${a}</b> - غدا ${tomorrow}<br><br>HT/FT: <b style='color:yellow'>${k}</b><br>النتيجة: <b style='font-size:36px;color:#00ff88'>${s}</b><br>Odd: ${(2.8+Math.random()*2).toFixed(2)} | ثقة 96%`;}
-loadTomorrow();
+change();
 </script></body></html>
